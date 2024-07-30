@@ -1,30 +1,24 @@
 // create web server    
-var http = require('http');
-var fs = require('fs');
-var url = require('url');
-var querystring = require('querystring');
+const express = require('express');
+const app = express();
+const port = 3000;
 
-// create server
-http.createServer(function(req, res) {
-    var pathname = url.parse(req.url).pathname;
-    var query = url.parse(req.url, true).query;
-    var page = query.page;
-    // read file
-    fs.readFile(pathname.substr(1), function(err, data) {
-        if (err) {
-            console.log(err);
-            // HTTP Status: 404 : NOT FOUND
-            // Content Type: text/plain
-            res.writeHead(404, {'Content-Type': 'text/html'});
-        } else {
-            // HTTP Status: 200 : OK
-            // Content Type: text/plain
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            // write file
-            res.write(data.toString());
-        }
-        // send response
-        res.end();
-    });
-}).listen(8080);
-console.log('Server running at http://');
+// create a middleware function
+app.use((req, res, next) => {
+  console.log('Middleware function called');
+  next();
+});
+
+// create a route
+app.get('/', (req, res) => {
+  res.send('This is the home page');
+});
+
+// create a route
+app.get('/about', (req, res) => {
+  res.send('This is the about page');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
